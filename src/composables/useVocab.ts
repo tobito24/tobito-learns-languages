@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { VocabItem } from '../types/vocab';
 
-const VOCAB_URL = 'https://example.com/vocab/en-de.json';
+const VOCAB_URL = `${import.meta.env.BASE_URL}data/example-vocab-en-de.json`;
 
 export const useVocab = () => {
   const vocab = ref<VocabItem[]>([]);
