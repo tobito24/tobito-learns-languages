@@ -4,6 +4,12 @@ export const en: MessageSchema = {
   ui: {
     appTitle: 'Tobito Learns Languages',
     currentLocale: 'en',
+    navigation: {
+      home: 'Home',
+      learn: 'Learn',
+      games: 'Games',
+      settings: 'Settings',
+    }
   },
   home: {
     welcomeMessage: 'Welcome to Tobito Learns Languages!',
@@ -15,8 +21,11 @@ export const en: MessageSchema = {
   settings: {
     title: 'Settings',
     colorPicker: 'Choose your favorite color:',
-    currentColor: 'Current color: {color}',
-    test: 'Current Language: EN',
+    languageLabel: 'Select Language (App):',
+    languageOptions: {
+      en: 'English',
+      de: 'German',
+    }
   },
   indexCardLearning: {
     from: 'From:',

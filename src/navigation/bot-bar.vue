@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import Button from "primevue/button";
 
+const { t } = useI18n()
 </script>
 
 <template>
@@ -26,16 +28,17 @@ import Button from "primevue/button";
             'h-16',
         ]">
             <router-link to="/">
-                <Button icon="pi pi-home" rounded aria-label="Button Home" />
+                <Button icon="pi pi-home" rounded aria-label="Button Home" :label="t('ui.navigation.home')" class="hidden md:inline" />
             </router-link>
             <router-link to="/learn">
-                <Button icon="pi pi-id-card" rounded aria-label="Button Learn" />
+                <Button icon="pi pi-id-card" rounded aria-label="Button Learn" :label="t('ui.navigation.learn')" />
             </router-link>
             <router-link to="/">
-                <Button icon="pi pi-user" rounded disabled aria-label="Button Profile" />
+                <Button icon="pi pi-play-circle" rounded disabled aria-label="Button Profile"
+                    :label="t('ui.navigation.games')" />
             </router-link>
             <router-link to="/settings">
-                <Button icon="pi pi-cog" rounded aria-label="Button Settings" />
+                <Button icon="pi pi-cog" rounded aria-label="Button Settings" :label="t('ui.navigation.settings')" />
             </router-link>
         </div>
     </nav>

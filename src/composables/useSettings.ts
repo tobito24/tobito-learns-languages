@@ -7,12 +7,12 @@ import type { PaletteDesignToken } from '@primeuix/themes/types'
 const STORAGE_KEY = 'tls-settings'
 
 export type Settings = {
-    language: AppLocale
+    language: AppLocale | null
     primaryColor: string
 }
 
 const defaultSettings: Settings = {
-    language: fallbackLocale,
+    language: null,
     primaryColor: DefaultValues.PRIMARY_COLOR,
 }
 
@@ -50,7 +50,6 @@ export function useSettings() {
 
     function setLanguage(language: AppLocale) {
         state.language = language;
-        // TODO: setLocale does not yet update the displayed texts immediately
         setLocale(language);
         updateLocalStorage();
     }

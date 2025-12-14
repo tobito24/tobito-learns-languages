@@ -9,7 +9,7 @@ import { updatePrimaryPalette, palette } from '@primeuix/themes'
 import type { PaletteDesignToken } from '@primeuix/themes/types'
 import { useSettings } from '@/composables/useSettings'
 
-const { primaryColor, currentLanguage } = useSettings();
+const { primaryColor } = useSettings();
 
 const app = createApp(App)
 

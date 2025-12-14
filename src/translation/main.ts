@@ -2,6 +2,9 @@ import { createI18n } from 'vue-i18n'
 import type { MessageSchema } from './schema'
 import { en } from './en'
 import { de } from './de'
+import { useSettings } from '@/composables/useSettings';
+
+const { currentLanguage } = useSettings();
 
 export const supportedLanguages = ['en', 'de'] as const;
 export const fallbackLocale = 'en';
@@ -21,7 +24,7 @@ function detectLocale(supportedLocales: readonly AppLocale[], fallback: AppLocal
   return fallback
 }
 
-const initialLocale: AppLocale = detectLocale(supportedLanguages, fallbackLocale)
+const initialLocale: AppLocale = currentLanguage.value ?? detectLocale(supportedLanguages, fallbackLocale)
 
 export const i18n = createI18n<[MessageSchema], AppLocale>({
   legacy: false,
@@ -34,5 +37,6 @@ export const i18n = createI18n<[MessageSchema], AppLocale>({
 })
 
 export function setLocale(locale: AppLocale) {
-  i18n.global.locale = locale
+  const localeRef = i18n.global.locale as unknown as { value: AppLocale }
+  localeRef.value = locale
 }
