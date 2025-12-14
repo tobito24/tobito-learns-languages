@@ -44,7 +44,7 @@ const { vocab, isLoading, error } = useVocab()
         </div>
         <div v-else-if="error" :class="[
             'text-md',
-            'text-surface-950'
+            'text-danger-600',
         ]">
             {{ t('home.errorLoadingVocab', { msg: error }) }}
         </div>

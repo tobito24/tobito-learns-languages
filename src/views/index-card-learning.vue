@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, watch, ref } from 'vue'
 import Button from 'primevue/button'
 import Select from 'primevue/select';
+import Divider from 'primevue/divider';
+import Carousel from 'primevue/carousel';
+import Badge from 'primevue/badge';
 import { useVocab, type VocabItem } from '@/composables/useVocab'
 import { useI18n } from 'vue-i18n'
 
@@ -22,16 +25,37 @@ const toLanguage = ref<LangCode>('es');
 const isLanguageIconSwapped = ref(false)
 
 
-const shuffledVocab = ref<VocabItem[]>([]);
-const currentIndex = ref(0);
-const isFlipped = ref(false);
+const shuffledVocab = ref<VocabItem[]>([])
+const isFlipped = ref<boolean[]>([])
 
 const hasCards = computed(() => !isLoading.value && !error.value && shuffledVocab.value.length > 0)
+const responsiveOptions = ref([
+    {
+        breakpoint: '1400px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '1199px',
+        numVisible: 3,
+        numScroll: 1
+    },
+    {
+        breakpoint: '767px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '575px',
+        numVisible: 1,
+        numScroll: 1
+    }
+]);
 
-const currentItem = computed(() => {
-    if (!hasCards.value) return null
-    return shuffledVocab.value[currentIndex.value] ?? null
-})
+watch(vocab, (newVocab) => {
+    shuffledVocab.value = shuffle(newVocab)
+    isFlipped.value = Array(newVocab.length).fill(false)
+}, { immediate: true })
 
 function shuffle(list: VocabItem[]): VocabItem[] {
     const arr = [...list]
@@ -42,33 +66,17 @@ function shuffle(list: VocabItem[]): VocabItem[] {
     return arr
 }
 
-watch(
-    vocab,
-    (newVocab) => {
-        shuffledVocab.value = shuffle(newVocab)
-        currentIndex.value = 0
-        isFlipped.value = false
-    },
-    { immediate: true },
-)
-
 function swapLanguages() {
     const from = fromLanguage.value
     fromLanguage.value = toLanguage.value
     toLanguage.value = from
-    isFlipped.value = false
+    isFlipped.value = Array(vocab.value.length).fill(false)
     isLanguageIconSwapped.value = !isLanguageIconSwapped.value
 }
 
-function nextCard() {
+function toggleFlip(id: number) {
     if (!hasCards.value) return
-    currentIndex.value = (currentIndex.value + 1) % shuffledVocab.value.length
-    isFlipped.value = false
-}
-
-function toggleFlip() {
-    if (!hasCards.value) return
-    isFlipped.value = !isFlipped.value
+    isFlipped.value[id] = !isFlipped.value[id]
 }
 </script>
 
@@ -108,59 +116,76 @@ function toggleFlip() {
                     class="w-[200px]" />
             </div>
         </div>
-
-        <div>{{ vocab.length }} cards</div>
-
-        <div v-if="isLoading">
-            Loading cards...
+        <Divider />
+        <p v-if="!isLoading" :class="[
+            'text-md',
+            'text-surface-950'
+        ]">
+            {{ t('indexCardLearning.activeCards', { count: vocab.length }) }}
+        </p>
+        <div v-else-if="isLoading && !error" :class="[
+            'text-md',
+            'text-surface-950'
+        ]">
+            {{ t('home.loadingVocab') }}
         </div>
-        <div v-else-if="error">
-            Error loading cards: {{ error }}
-        </div>
-
-        <div v-else-if="hasCards" :class="['flex', 'flex-col', 'items-center', 'gap-4']">
-            <div :class="[
-                'w-full',
-                'max-w-md',
-                'h-48',
-                'flex',
-                'items-center',
-                'justify-center',
-                'rounded-2xl',
-                'bg-surface-100',
-                'border',
-                'border-surface-300',
-                'shadow-sm',
-                'cursor-pointer',
-                'select-none',
-                'transition-transform',
-                'hover:shadow-md',
-            ]" @click="toggleFlip">
-                <p :class="[
-                    'text-2xl',
-                    'font-semibold',
-                    'text-center',
-                    'px-4',
-                ]">
-                    <span v-if="currentItem && !isFlipped">
-                        {{ currentItem.translations[fromLanguage].text }}
-                    </span>
-                    <span v-else-if="currentItem && isFlipped">
-                        {{ currentItem.translations[toLanguage].text }}
-                    </span>
-                </p>
-            </div>
-
-            <div :class="['flex', 'items-center', 'justify-between', 'w-full', 'max-w-md']">
-                <span>
-                    {{ currentIndex + 1 }} / {{ shuffledVocab.length }}
-                </span>
-                <Button label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="nextCard" />
-            </div>
+        <div v-else-if="error" :class="[
+            'text-md',
+            'text-danger-600',
+        ]">
+            {{ t('home.errorLoadingVocab', { msg: error }) }}
         </div>
 
-        <div v-else>
-            No cards available.
+        <div v-if="hasCards" :class="[
+            'w-full',
+            'p-8',
+        ]">
+            <Carousel :value="shuffledVocab" :numVisible="3" :numScroll="1" :circular="true" :showIndicators="true"
+                :showNavigators="true" :responsiveOptions="responsiveOptions">
+                <template #item="slotProps">
+                    <Transition name="flip-card" mode="out-in">
+                        <div :key="isFlipped[slotProps.data.id] ? 'card-back' : 'card-front'" :class="[
+                            'border-2',
+                            isFlipped[slotProps.data.id] ? 'border-surface-300' : 'border-primary-300',
+                            isFlipped[slotProps.data.id] ? 'bg-surface-100' : 'bg-surface-50',
+                            'rounded-2xl',
+                            'p-4',
+                            'm-2',
+                        ]" @click="toggleFlip(slotProps.data.id)">
+                            <Badge :value="slotProps.data.id" />
+                            <div :class="[
+                                'p-6',
+                                'text-center',
+                                'text-2xl',
+                                'font-semibold',
+                            ]">
+                                {{ isFlipped[slotProps.data.id]
+                                    ? slotProps.data.translations[fromLanguage].text
+                                    : slotProps.data.translations[toLanguage].text
+                                }}
+                            </div>
+                        </div>
+                    </Transition>
+                </template>
+            </Carousel>
         </div>
     </div>
 </template>
+
+<style>
+.flip-card-enter-active,
+.flip-card-leave-active {
+    transition: transform 300ms ease, opacity 300ms ease;
+    transform-style: preserve-3d;
+}
+
+.flip-card-enter-from {
+    opacity: 0.1;
+    transform: rotateY(90deg);
+}
+
+.flip-card-leave-to {
+    opacity: 0.1;
+    transform: rotateY(-90deg);
+}
+</style>

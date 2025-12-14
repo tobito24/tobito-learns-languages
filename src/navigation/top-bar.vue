@@ -65,12 +65,17 @@ function toggle(event: Event) {
         <Button icon="pi pi-bars" rounded aria-label="Menu" @click="toggle" aria-haspopup="true"
             aria-controls="overlay_menu" />
         <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" appendTo="body">
-            <template #item="{ item, props }">
-                <router-link v-if="item.to" v-slot="{ href, navigate }" :to="item.to" custom>
-                    <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+            <template #item="{ item }">
+                <router-link v-if="item.to" :to="item.to">
+                    <div :class="[
+                        'flex',
+                        'items-center',
+                        'gap-2',
+                        'p-2',
+                    ]">
                         <span :class="item.icon" class="text-primary" />
                         <span class="ml-2">{{ item.label }}</span>
-                    </a>
+                    </div>
                 </router-link>
             </template>
         </Menu>

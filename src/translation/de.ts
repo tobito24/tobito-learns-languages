@@ -31,6 +31,7 @@ export const de: MessageSchema = {
   indexCardLearning: {
     from: 'Von:',
     to: 'Zu:',
+    activeCards: 'Es sind {count} Karten aktiv',
     languageOptions: {
       en: 'Englisch',
       de: 'Deutsch',
