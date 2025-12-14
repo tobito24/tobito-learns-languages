@@ -18,4 +18,13 @@ export const en: MessageSchema = {
     currentColor: 'Current color: #{color}',
     test: 'Current Language: EN',
   },
+  indexCardLearning: {
+    from: 'From:',
+    to: 'To:',
+    languageOptions: {
+      en: 'English',
+      de: 'German',
+      es: 'Spanish',
+    },
+  },
 }

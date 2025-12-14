@@ -1,3 +1,5 @@
+import type IndexCardLearning from "@/views/index-card-learning.vue"
+
 export type MessageSchema = {
   ui: {
     appTitle: string
@@ -16,4 +18,13 @@ export type MessageSchema = {
     currentColor: string
     test: string
   },
+  indexCardLearning: {
+    from: string,
+    to: string,
+    languageOptions: {
+      en: string
+      de: string
+      es: string
+    }
+  }
 }
