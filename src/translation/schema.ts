@@ -37,5 +37,11 @@ export type MessageSchema = {
       de: string,
       es: string,
     }
+  },
+  components: {
+    vocabCard: {
+      synonymsLabel: string,
+      examplesLabel: string,
+    }
   }
 }

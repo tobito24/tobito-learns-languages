@@ -6,6 +6,7 @@ import Divider from 'primevue/divider';
 import Carousel from 'primevue/carousel';
 import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
+import Popover from 'primevue/popover';
 import VocabCardSide from '@/components/VocabCardSide.vue'
 import { useVocab, type VocabItem } from '@/composables/useVocab'
 import { useI18n } from 'vue-i18n'
@@ -32,6 +33,10 @@ const isFlipped = ref<boolean[]>([])
 
 const hasCards = computed(() => !isLoading.value && !error.value && shuffledVocab.value.length > 0)
 
+const popoverRef = ref()
+const popoverTags = ref<string[]>([])
+const popoverLanguageLevel = ref<string>('')
+
 watch(vocab, (newVocab) => {
     shuffledVocab.value = shuffle(newVocab)
     isFlipped.value = Array(newVocab.length).fill(false)
@@ -50,13 +55,20 @@ function swapLanguages() {
     const from = fromLanguage.value
     fromLanguage.value = toLanguage.value
     toLanguage.value = from
+
     isFlipped.value = Array(vocab.value.length).fill(false)
     isLanguageIconSwapped.value = !isLanguageIconSwapped.value
 }
 
-function toggleFlip(id: number) {
+function toggleFlipCard(id: number) {
     if (!hasCards.value) return
     isFlipped.value[id] = !isFlipped.value[id]
+}
+
+function togglePopoverTags(event: Event, item: VocabItem) {
+    popoverTags.value = item.tags
+    popoverLanguageLevel.value = item.level
+    popoverRef.value?.toggle(event)
 }
 </script>
 
@@ -80,7 +92,7 @@ function toggleFlip(id: number) {
                     'text-surface-700'
                 ]">{{ t('indexCardLearning.from') }}</p>
                 <Select v-model="fromLanguage" :options="languageOptions" option-label="label" option-value="value"
-                    class="sm:w-[200px] w-[150px]" />
+                    class="sm:w-[200px] w-[125px]" />
             </div>
             <div :class="[
                 'transition-transform', 'duration-300', isLanguageIconSwapped ? 'rotate-180' : 'rotate-0', 'self-end'
@@ -93,7 +105,7 @@ function toggleFlip(id: number) {
                     'text-surface-700'
                 ]">{{ t('indexCardLearning.to') }}</p>
                 <Select v-model="toLanguage" :options="languageOptions" option-label="label" option-value="value"
-                    class="sm:w-[200px] w-[150px]" />
+                    class="sm:w-[200px] w-[125px]" />
             </div>
         </div>
         <Divider />
@@ -109,12 +121,16 @@ function toggleFlip(id: number) {
                             'rounded-2xl',
                             'p-4',
                             'm-2',
-                        ]" @click="toggleFlip(slotProps.data.id)">
+                        ]" @click="toggleFlipCard(slotProps.data.id)">
                             <div :class="['flex', 'items-center', 'justify-between', 'mb-3']">
                                 <Badge :value="slotProps.data.id" />
-                                <div :class="['flex', 'gap-2', 'items-center']">
+                                <div :class="['hidden', 'sm:flex', 'gap-2', 'items-center']">
                                     <Tag v-for="tag in slotProps.data.tags" :key="tag" :value="tag" rounded />
                                     <Tag :value="slotProps.data.level" severity="info" rounded />
+                                </div>
+                                <div :class="['flex', 'sm:hidden', 'items-center']">
+                                    <Button icon="pi pi-tags" text rounded
+                                        @click.stop="togglePopoverTags($event, slotProps.data)" />
                                 </div>
                             </div>
 
@@ -129,6 +145,12 @@ function toggleFlip(id: number) {
                     </Transition>
                 </template>
             </Carousel>
+            <Popover ref="popoverRef">
+                <div :class="['flex', 'flex-wrap', 'gap-2']">
+                    <Tag v-for="tag in popoverTags" :key="tag" :value="tag" rounded />
+                    <Tag :value="popoverLanguageLevel" severity="info" rounded />
+                </div>
+            </Popover>
         </div>
         <Divider />
         <div :class="[

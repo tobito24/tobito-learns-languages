@@ -38,4 +38,10 @@ export const en: MessageSchema = {
       es: 'Spanish',
     },
   },
+  components: {
+    vocabCard: {
+      synonymsLabel: 'Synonyms',
+      examplesLabel: 'Examples',
+    }
+  }
 }

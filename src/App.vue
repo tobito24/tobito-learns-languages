@@ -14,7 +14,7 @@ loadVocab();
       <TopBar />
     </header>
 
-    <main class="px-4 pt-20 pb-28">
+    <main class="px-2 sm:px-4 py-20">
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
