@@ -60,7 +60,7 @@ watch(selectedLanguage, (newLocale) => {
                 <p>{{ t('settings.languageLabel') }}</p>
             </div>
             <Select v-model="selectedLanguage" :options="languageOptions" option-label="label" option-value="value"
-                class="w-[200px]" />
+                class="sm:w-[200px] w-[150px]" />
 
 
             <div :class="[

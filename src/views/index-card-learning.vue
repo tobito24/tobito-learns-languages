@@ -80,7 +80,7 @@ function toggleFlip(id: number) {
                     'text-surface-700'
                 ]">{{ t('indexCardLearning.from') }}</p>
                 <Select v-model="fromLanguage" :options="languageOptions" option-label="label" option-value="value"
-                    class="w-[200px]" />
+                    class="sm:w-[200px] w-[150px]" />
             </div>
             <div :class="[
                 'transition-transform', 'duration-300', isLanguageIconSwapped ? 'rotate-180' : 'rotate-0', 'self-end'
@@ -93,7 +93,7 @@ function toggleFlip(id: number) {
                     'text-surface-700'
                 ]">{{ t('indexCardLearning.to') }}</p>
                 <Select v-model="toLanguage" :options="languageOptions" option-label="label" option-value="value"
-                    class="w-[200px]" />
+                    class="sm:w-[200px] w-[150px]" />
             </div>
         </div>
         <Divider />

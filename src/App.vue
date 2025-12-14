@@ -10,11 +10,11 @@ loadVocab();
 
 <template>
   <div class="bg-primary-100 min-h-screen">
-    <header>
+    <header class="fixed top-0 left-0 right-0 z-20">
       <TopBar />
     </header>
 
-    <main class="p-4" role="main">
+    <main class="px-4 pt-20 pb-28">
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -22,7 +22,7 @@ loadVocab();
       </RouterView>
     </main>
 
-    <footer>
+    <footer class="fixed bottom-0 left-0 right-0 z-20">
       <BotBar />
     </footer>
   </div>
