@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import Button from "primevue/button";
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 </script>
 
 <template>
-    <nav aria-label="Main navigation" :class="[
+    <nav aria-label="Top Navigation" :class="[
         'flex',
         'flex-row',
         'justify-between',
         'items-center',
         'gap-4',
         'p-4',
-        'bg-gray-500',
+        'bg-surface-200',
         'shadow-2xl',
         'mb-4',
     ]">
@@ -19,14 +23,18 @@
                 'h-10',
                 'w-10',
                 'rounded-full',
-                'shadow-md',
+                'shadow-xs',
             ]" />
         </router-link>
 
-        <!-- 
-        <router-link to="/learn">Lernen</router-link>
-        <router-link to="/review">Wiederholen</router-link>
-        <router-link to="/settings">Einstellungen</router-link> 
-        -->
+        <p :class="[
+            'text-primary',
+            'font-bold',
+            'text-lg',
+        ]">
+            {{ t('ui.appTitle') }}
+        </p>
+
+        <Button icon="pi pi-bars" rounded aria-label="Menu" />
     </nav>
 </template>

@@ -2,15 +2,20 @@ import type { MessageSchema } from './schema'
 
 export const en: MessageSchema = {
   ui: {
-    test: 'TEST EN',
-    vocabCount: 'Vocab items: {count}',
-    loading: 'Loading vocab…',
-    error: 'Error: {msg}',
-    arrow: '→',
+    appTitle: 'Tobito Learns Languages',
+    currentLocale: 'en',
   },
-  nav: {
-    learn: 'Learn',
-    review: 'Review',
-    settings: 'Settings',
+  home: {
+    welcomeMessage: 'Welcome to Tobito Learns Languages!',
+    getStartedMessage: 'Get started learning new vocab now.',
+    currentVocabCount: 'Current vocab count: {count}',
+    loadingVocab: 'Loading vocab…',
+    errorLoadingVocab: 'Error loading vocab: {msg}',
+  },
+  settings: {
+    title: 'Settings',
+    colorPicker: 'Choose your favorite color:',
+    currentColor: 'Current color: #{color}',
+    test: 'Current Language: EN',
   },
 }

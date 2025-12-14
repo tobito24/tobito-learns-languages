@@ -5,6 +5,8 @@ import { router } from './router'
 import '@/assets/main.css'
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
+import { updatePrimaryPalette, palette } from '@primeuix/themes'
+import type { PaletteDesignToken } from '@primeuix/themes/types'
 
 const app = createApp(App)
 
@@ -15,5 +17,7 @@ app.use(PrimeVue, {
         preset: Aura
     }
 });
+
+updatePrimaryPalette(palette('#56070C') as PaletteDesignToken );
 
 app.mount('#app')

@@ -2,15 +2,20 @@ import type { MessageSchema } from './schema'
 
 export const de: MessageSchema = {
   ui: {
-    test: 'TEST DE',
-    vocabCount: 'Vokabeln: {count}',
-    loading: 'Lade Vokabeln…',
-    error: 'Fehler: {msg}',
-    arrow: '→',
+    appTitle: 'Tobito lernt Sprachen',
+    currentLocale: 'de',
   },
-  nav: {
-    learn: 'Lernen',
-    review: 'Wiederholen',
-    settings: 'Einstellungen',
+  home: {
+    welcomeMessage: 'Willkommen bei Tobito lernt Sprachen!',
+    getStartedMessage: 'Beginne jetzt mit dem Lernen neuer Vokabeln.',
+    currentVocabCount: 'Aktuellee Vokabelanzahl: {count}',
+    loadingVocab: 'Lade Vokabeln…',
+    errorLoadingVocab: 'Fehler beim Laden der Vokabeln: {msg}',
+  },
+  settings: {
+    title: 'Einstellungen',
+    colorPicker: 'Wähle deine Lieblingsfarbe:',
+    currentColor: 'Aktuelle Farbe: #{color}',
+    test: 'Aktuelle Sprache: DE',
   },
 }

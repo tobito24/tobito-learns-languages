@@ -1,15 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home-view.vue'
-// import LearnView from '@/views/LearnView.vue'
-// import ReviewView from '@/views/ReviewView.vue'
-// import SettingsView from '@/views/SettingsView.vue'
+import IndexCardLearning from '@/views/index-card-learning.vue'
+import Settings from '@/views/settings.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', component: HomeView },
-    // { path: '/learn', component: LearnView },
-    // { path: '/review', component: ReviewView },
-    // { path: '/settings', component: SettingsView },
+    { path: '/learn', component: IndexCardLearning },
+    { path: '/settings', component: Settings },
   ],
 })
