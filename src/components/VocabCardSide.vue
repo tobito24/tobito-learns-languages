@@ -12,11 +12,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div :class="['p-4', 'text-left', 'space-y-4']">
+  <div :class="['p-4', 'text-left', 'space-y-4', 'max-w-full', 'whitespace-normal', 'wrap-break-word']">
     <p :class="['text-sm', 'font-semibold', 'uppercase', 'text-surface-500']">
       {{ props.label }}
     </p>
-    <p :class="['text-4xl', 'font-semibold', 'mt-1', 'text-surface-950']">
+    <p :class="['text-xl', 'font-bold', 'mt-1', 'text-surface-950']">
       {{ props.translation.text }}
     </p>
     <p v-if="props.translation.phonetic" :class="['text-sm', 'text-surface-500', 'mt-1']">

@@ -110,8 +110,8 @@ function togglePopoverTags(event: Event, item: VocabItem) {
         </div>
         <Divider />
         <div v-if="hasCards" :class="['w-full']">
-            <Carousel :value="shuffledVocab" :numVisible="1" :numScroll="1" :circular="true" :showIndicators="true"
-                :showNavigators="true">
+            <Carousel :value="shuffledVocab" :numVisible="1" :numScroll="1" :circular="true"
+                :showIndicators="shuffledVocab.length < 20" :showNavigators="true">
                 <template #item="slotProps">
                     <Transition name="flip-card" mode="out-in">
                         <div :key="isFlipped[slotProps.data.id] ? 'card-back' : 'card-front'" :class="[
@@ -121,6 +121,9 @@ function togglePopoverTags(event: Event, item: VocabItem) {
                             'rounded-2xl',
                             'p-4',
                             'm-2',
+                            'w-60',
+                            'sm:w-full',
+                            'mx-auto',
                         ]" @click="toggleFlipCard(slotProps.data.id)">
                             <div :class="['flex', 'items-center', 'justify-between', 'mb-3']">
                                 <Badge :value="slotProps.data.id" />
