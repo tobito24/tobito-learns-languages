@@ -8,14 +8,23 @@ import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import Popover from 'primevue/popover';
 import VocabCardSide from '@/components/VocabCardSide.vue'
-import { useSettings } from '@/composables/useSettings';
 import { useVocab, type VocabItem } from '@/composables/useVocab'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n();
 
-const { vocab, isLoading, error } = useVocab();
-const { toggleMarkedVocabItemId, isVocabItemIdMarked, resetMarkedVocabItemIds, markedVocabItemIds } = useSettings();
+const {
+    allVocabs,
+    activeVocabs,
+    isLoading,
+    error,
+    filterActiveVocabs,
+    shuffleActiveVocabs,
+    toggleMarkedVocabItemId,
+    isVocabItemIdMarked,
+    resetMarkedVocabItemIds,
+    markedVocabItemIdsLength,
+} = useVocab();
 
 type LangCode = 'en' | 'de' | 'es';
 
@@ -29,7 +38,6 @@ const fromLanguage = ref<LangCode>('en');
 const toLanguage = ref<LangCode>('es');
 const isLanguageIconSwapped = ref(false);
 
-const activeVocabs = ref<VocabItem[]>([]);
 const isFlipped = ref<{ [key: number]: boolean }>({});
 const hasCards = computed(() => !isLoading.value && !error.value && activeVocabs.value.length > 0);
 
@@ -40,22 +48,13 @@ const popoverRef = ref();
 const popoverTags = ref<string[]>([]);
 const popoverLanguageLevel = ref<string>('');
 
-function shuffle(list: VocabItem[]): VocabItem[] {
-    const arr = [...list]
-    for (let i = arr.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1))
-            ;[arr[i]!, arr[j]!] = [arr[j]!, arr[i]!]
-    }
-    return arr
-}
-
 function swapLanguages() {
-    const from = fromLanguage.value
-    fromLanguage.value = toLanguage.value
-    toLanguage.value = from
+    const from = fromLanguage.value;
+    fromLanguage.value = toLanguage.value;
+    toLanguage.value = from;
 
-    isFlipped.value = Array(vocab.value.length).fill(false)
-    isLanguageIconSwapped.value = !isLanguageIconSwapped.value
+    isLanguageIconSwapped.value = !isLanguageIconSwapped.value;
+    resetFlipCards();
 }
 
 function toggleFlipCard(id: number) {
@@ -69,30 +68,23 @@ function togglePopoverTags(event: Event, item: VocabItem) {
     popoverRef.value?.toggle(event)
 }
 
+function resetFlipCards() {
+    isFlipped.value = activeVocabs.value.reduce((acc, item) => {
+        acc[item.id] = false
+        return acc
+    }, {} as { [key: number]: boolean })
+}
+
 function onShuffle() {
-    activeVocabs.value = shuffle(vocab.value)
-    isFlipped.value = activeVocabs.value.reduce((acc, item) => {
-        acc[item.id] = false
-        return acc
-    }, {} as { [key: number]: boolean })
+    shuffleActiveVocabs();
+    resetFlipCards();
 }
 
-// TODO: Filter for tags, levels and marked status
 function onFilter() {
-    const filtered = vocab.value.filter(item => isVocabItemIdMarked(item.id))
-    console.log(filtered.length);
-
-    activeVocabs.value = shuffle(filtered)
-    isFlipped.value = activeVocabs.value.reduce((acc, item) => {
-        acc[item.id] = false
-        return acc
-    }, {} as { [key: number]: boolean })
-    activePage.value = 0
+    filterActiveVocabs();
+    shuffleActiveVocabs();
+    resetFlipCards();
 }
-
-watch(vocab, () => {
-    onShuffle()
-}, { immediate: true })
 </script>
 
 <template>
@@ -131,7 +123,9 @@ watch(vocab, () => {
                     class="sm:w-[200px] w-[125px]" />
             </div>
         </div>
+
         <Divider />
+
         <div v-if="hasCards" :class="['w-full']">
             <Carousel v-model:page="activePage" :value="activeVocabs" :numVisible="1" :numScroll="1" :circular="true"
                 :showIndicators="activeVocabs.length < 20" :showNavigators="true">
@@ -179,7 +173,9 @@ watch(vocab, () => {
                 </div>
             </Popover>
         </div>
+
         <Divider />
+
         <div v-if="hasCards" :class="[
             'grid',
             'grid-cols-2',
@@ -202,7 +198,7 @@ watch(vocab, () => {
                 'text-center',
             ]">
                 {{
-                    t('indexCardLearning.markedCards', { allCount: vocab.length, markedCount: markedVocabItemIds.length })
+                    t('indexCardLearning.markedCards', { allCount: allVocabs.length, markedCount: markedVocabItemIdsLength })
                 }}
             </p>
             <div>

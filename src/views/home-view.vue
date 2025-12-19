@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const { vocab, isLoading, error } = useVocab()
+const { allVocabs, isLoading, error } = useVocab()
 </script>
 
 <template>
@@ -34,7 +34,7 @@ const { vocab, isLoading, error } = useVocab()
             'text-md',
             'text-surface-950'
         ]">
-            {{ t('home.currentVocabCount', { count: vocab.length }) }}
+            {{ t('home.currentVocabCount', { count: allVocabs.length }) }}
         </p>
         <div v-else-if="isLoading && !error" :class="[
             'text-md',
@@ -54,7 +54,7 @@ const { vocab, isLoading, error } = useVocab()
                 'grid-cols-3',
                 'gap-2',
             ]">
-                <div v-for="item in vocab" :key="item.id" :class="[
+                <div v-for="item in allVocabs" :key="item.id" :class="[
                     'border',
                     'border-surface-300',
                     'rounded-xl',

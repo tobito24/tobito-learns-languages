@@ -1,4 +1,4 @@
-import { createApp, watch } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import { i18n } from './translation/main'
 import { router } from './router'
@@ -7,9 +7,9 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import { updatePrimaryPalette, palette } from '@primeuix/themes'
 import type { PaletteDesignToken } from '@primeuix/themes/types'
-import { useSettings } from '@/composables/useSettings'
+import { useStorageData } from '@/composables/useStorage'
 
-const { primaryColor } = useSettings();
+const { primaryColor } = useStorageData();
 
 const app = createApp(App)
 
@@ -21,7 +21,7 @@ app.use(PrimeVue, {
     }
 });
 
-updatePrimaryPalette(palette(primaryColor.value) as PaletteDesignToken );
+updatePrimaryPalette(palette(primaryColor.value) as PaletteDesignToken);
 document.title = i18n.global.t('ui.appTitle')
 
 app.mount('#app')

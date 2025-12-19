@@ -5,7 +5,7 @@ import Select from 'primevue/select';
 import { useI18n } from 'vue-i18n'
 import { DefaultValues } from '@/enums/default-values'
 import { useSettings } from '@/composables/useSettings';
-import { supportedLocales, fallbackLocale, type AppLocale } from '@/translation/main'
+import { supportedLocales, fallbackLocale, type AppLocale } from '@/translation/locales';
 import { Divider } from 'primevue';
 
 const { t } = useI18n()
