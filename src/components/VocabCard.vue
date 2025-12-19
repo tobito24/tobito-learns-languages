@@ -35,12 +35,11 @@ function onToggleTags(event: Event) {
             'border-2',
             isFlipped ? 'border-surface-300' : 'border-primary-300',
             isFlipped ? 'bg-surface-100' : 'bg-surface-50',
-            isMarked ? 'ring-4 ring-primary-300' : '',
+            isMarked ? 'inset-ring-4 inset-ring-primary-300' : '',
             'rounded-2xl',
             'p-4',
-            'm-2',
-            'w-60',
-            'sm:w-full',
+            'my-4',
+            'w-60 sm:w-full',
             'mx-auto',
         ]" @click="onToggleFlip">
             <div :class="['flex', 'items-center', 'justify-between', 'mb-3']">
