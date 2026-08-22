@@ -52,7 +52,7 @@ const rolls = Array.from(
 
 const exactProbabilities = computed<ExactProbability[]>(() =>
     rolls.map((target) => {
-        const combinations = combinationsByRoll[target];
+        const combinations = combinationsByRoll[target] ?? 0;
 
         return {
             target,
@@ -73,7 +73,7 @@ const getMinimumProbability = (target: number): number => {
 
     const combinations = rolls
         .filter((roll) => roll >= target)
-        .reduce((sum, roll) => sum + combinationsByRoll[roll], 0);
+        .reduce((sum, roll) => sum + (combinationsByRoll[roll] ?? 0), 0);
 
     return combinations / TOTAL_COMBINATIONS;
 };
@@ -89,7 +89,7 @@ const getMaximumProbability = (target: number): number => {
 
     const combinations = rolls
         .filter((roll) => roll <= target)
-        .reduce((sum, roll) => sum + combinationsByRoll[roll], 0);
+        .reduce((sum, roll) => sum + (combinationsByRoll[roll] ?? 0), 0);
 
     return combinations / TOTAL_COMBINATIONS;
 };
